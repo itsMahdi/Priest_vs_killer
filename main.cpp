@@ -140,8 +140,8 @@ void search::action_state(state_node* current_state)
 ////////////////////////////////////////////////////////
 state_node* search::FIFO() //search in tree with first in first out mode
 {
-	state_list.push_back(start_state);
 	long int count=0;
+	state_list.push_back(start_state); // add first state to vector
 	while (state_list.size()>0)
 	{
 		count ++;
@@ -163,13 +163,37 @@ state_node* search::heuristic()
 {
 	
 	long int count=0;
-	state_list.push_back(start_state);
+	long int i,i_max=0;
+	int b_flag=1; //this variable will help us to bring peaple to  and so onleft on time and next tilem bring to right ( in states )
+	state_list.push_back(start_state); // add first state to vector
 	while (state_list.size()>0)	
 	{
 		count ++;
 		state_node *current_state;
+		//while (b_flag != state_list.at(i)->boat)
+		//{
+
+		//}
 		current_state = state_list.front();
-		state_list.erase(state_list.begin());
+		for (i=0;i<state_list.size();i++)
+		{
+			//if (b_flag == state_list.at(i)->boat )
+		//	{	
+				if ( state_list.at(i)->priest + state_list.at(i)->killer < current_state->priest + current_state->killer )
+				{
+				current_state = state_list.at(i);
+				i_max=i;
+				}
+		//	}
+		//	else 
+		//		if ( state_list.at(i)->priest + state_list.at(i)->killer < current_state->priest + current_state->killer )
+		//		current_state = state_list.at(i);
+		}
+
+		state_list.erase(state_list.begin() + i_max );
+		
+
+
 		if ( current_state->priest==0 && current_state->killer==0 )
 		{
 			cout<<"goal state founded";
@@ -184,14 +208,14 @@ state_node* search::heuristic()
 
 
 int main ()
-{}
+{
 	class search *condition;
 	int n;
 	cout<<"enter the number of killer = priesst = " ;
-	cin<<n;
+	cin>>n;
 	condition = new search(n);
 
-	state_node *ans = condition->FIFO();
+	state_node *ans = condition->heuristic();
 
 	cout<<endl<<ans->boat<<"	"<<ans->killer;
 
