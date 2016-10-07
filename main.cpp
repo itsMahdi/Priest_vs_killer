@@ -47,39 +47,20 @@ public:
 		start_state = new state_node(NULL,n,n,1);
 	}
 
+	void action_state(state_node *); // it will find the possible move from each state and add that to vector state list
 	state_node* LIFO (); //searching for goal state with last in first out strategy
 	state_node* FIFO (); //searching for goal state with first in first out strategy
 
 	// LIFO is DFS search and FIFO is BFS strategy
 };
 /////////////////////////////////////////////////////////
-state_node* search::FIFO()
+void search::action_state(state_node* current_state) 
 {
-	state_list.push_back(start_state);
-	long int count=0;
-	while (state_list.size()>0)
-	{
-		count ++;
-		cout<<"size = "<<state_list.size()<<endl;
-		state_node *next_state;
-		state_node *current_state;
-		current_state = state_list.front();
-		state_list.erase(state_list.begin());
-		//state_list.pop_back();
-		cout<<"size2 = "<<state_list.size()<<endl;
-		cout<<"priest= "<<current_state->priest<<" killer= "<<current_state->killer<<endl<<"boat= "<<current_state->boat<<endl;
-		if ( current_state->priest==0 && current_state->killer==0 )
-		{
-			cout<<"goal state founded";
-				cout<<"***"<<count<<"***";
+	state_node *next_state;
 
-			return current_state;
-			exit;
-		} else
-			{
+
 				if (current_state->boat==1) // this part will do the actins when the boat is on the right side
 				{
-					cout<<"injaaaaaaaaaaaaaaaaaa"<<endl;
 					if (current_state->priest -2 >= 0 )  //bringing 2 priest to the left
 					{
 						next_state = new state_node(current_state,current_state->priest -2,current_state->killer,-1);
@@ -101,7 +82,7 @@ state_node* search::FIFO()
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
-					if (current_state->priest -1 >= 0 )
+				/*	if (current_state->priest -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest -1,current_state->killer,-1);
 						if (next_state->priest <= next_state->killer)
@@ -114,12 +95,11 @@ state_node* search::FIFO()
 						if (next_state->priest <= next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
-					}
+					}*/
 				}
 				if (current_state->boat== -1) // this part will do the actins when the boat is on the left side
 				{
-					cout<<"oooooooonja"<<endl;
-					if (n - current_state->priest -2 >= 0 ) //bringing 2 priest to the right side
+				/*	if (n - current_state->priest -2 >= 0 ) //bringing 2 priest to the right side
 					{
 						next_state = new state_node(current_state,current_state->priest +2,current_state->killer, 1);
 						if (next_state->priest <= next_state->killer)
@@ -139,7 +119,7 @@ state_node* search::FIFO()
 						if (next_state->priest <= next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
-					}
+					}*/
 					if (n - current_state->priest -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest +1,current_state->killer, 1 );
@@ -155,7 +135,27 @@ state_node* search::FIFO()
 						else delete next_state;
 					}
 				}
-			}
+}
+////////////////////////////////////////////////////////
+state_node* search::FIFO() //search in tree with first in first out mode
+{
+	state_list.push_back(start_state);
+	long int count=0;
+	while (state_list.size()>0)
+	{
+		count ++;
+		cout<<"size = "<<state_list.size()<<endl;
+		state_node *next_state;
+		state_node *current_state;
+		current_state = state_list.front();
+		state_list.erase(state_list.begin());
+		if ( current_state->priest==0 && current_state->killer==0 )
+		{
+			cout<<"goal state founded";
+			cout<<"***"<<count<<"***";
+			return current_state;		} 
+		else
+			action_state(current_state);
 
 	}
 }
@@ -164,9 +164,12 @@ state_node* search::FIFO()
 
 
 int main ()
-{
+{}
 	class search *condition;
-	condition = new search(2);
+	int n;
+	cout<<"enter the number of killer = priesst = " ;
+	cin<<n;
+	condition = new search(n);
 
 	state_node *ans = condition->FIFO();
 
