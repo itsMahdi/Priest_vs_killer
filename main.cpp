@@ -39,11 +39,13 @@ it will search in BFS or DFS mode
 public:
 	int n; // number of killer and number of priest at the begining
 	state_node *start_state;
+	state_node *goal_state;
 	vector<state_node *> state_list;
 
 	search(int number) 
 	{
 		n = number;
+		goal_state=NULL;
 		start_state = new state_node(NULL,n,n,1);
 	}
 
@@ -58,80 +60,90 @@ public:
 void search::action_state(state_node* current_state) 
 {
 	state_node *next_state;
-
-
+	cout<<state_list.size()<<endl;
+	cout<<"***"<<current_state->priest<< "***";
 				if (current_state->boat==1) // this part will do the actins when the boat is on the right side
 				{
 					if (current_state->priest -2 >= 0 )  //bringing 2 priest to the left
 					{
 						next_state = new state_node(current_state,current_state->priest -2,current_state->killer,-1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
 					if (current_state->killer -2 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest,current_state->killer -2,-1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
 					if (current_state->priest -1 >=0 && current_state->killer -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest -1,current_state->killer -1,-1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
-				/*	if (current_state->priest -1 >= 0 )
+					if (current_state->priest -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest -1,current_state->killer,-1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
 					if (current_state->killer -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest,current_state->killer-1,-1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
-					}*/
+					}
 				}
 				if (current_state->boat== -1) // this part will do the actins when the boat is on the left side
 				{
-				/*	if (n - current_state->priest -2 >= 0 ) //bringing 2 priest to the right side
+					if (n - current_state->priest -2 >= 0 ) //bringing 2 priest to the right side
 					{
 						next_state = new state_node(current_state,current_state->priest +2,current_state->killer, 1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
 					if (n - current_state->killer -2 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest,current_state->killer +2, 1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
 					if (n - current_state->priest -1 >=0 && n - current_state->killer -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest +1,current_state->killer +1, 1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
-					}*/
+					}
 					if (n - current_state->priest -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest +1,current_state->killer, 1 );
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
 					if (n - current_state->killer -1 >= 0 ) 
 					{
 						next_state = new state_node(current_state,current_state->priest,current_state->killer+1, 1);
-						if (next_state->priest <= next_state->killer)
+						if (next_state->priest==0 || next_state->priest >= next_state->killer)
+							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
 						else delete next_state;
 					}
@@ -144,6 +156,8 @@ state_node* search::FIFO() //search in tree with first in first out mode
 	state_list.push_back(start_state); // add first state to vector
 	while (state_list.size()>0)
 	{
+			cout<<state_list.size()<<"*********"<<endl;
+
 		count ++;
 		state_node *current_state;
 		current_state = state_list.front();
@@ -152,6 +166,8 @@ state_node* search::FIFO() //search in tree with first in first out mode
 		{
 			cout<<"goal state founded";
 			cout<<"***"<<count<<"***";
+			goal_state = new state_node;
+			goal_state = current_state;
 			return current_state;		} 
 		else
 			action_state(current_state);
@@ -198,6 +214,8 @@ state_node* search::heuristic()
 		{
 			cout<<"goal state founded";
 			cout<<"***"<<count<<"***";
+			goal_state = new state_node;
+			goal_state = current_state;
 			return current_state;		} 
 		else
 			action_state(current_state);
@@ -210,12 +228,17 @@ state_node* search::heuristic()
 int main ()
 {
 	class search *condition;
-	int n;
+	int n,flag;
+	state_node *ans;
 	cout<<"enter the number of killer = priesst = " ;
 	cin>>n;
+	cout<<"1. heuristic\n2.FIFO: ";
+	cin>>flag;
 	condition = new search(n);
-
-	state_node *ans = condition->heuristic();
+	if (flag == 1)
+		ans = condition->heuristic();
+	else
+		ans = condition->FIFO();
 
 	cout<<endl<<ans->boat<<"	"<<ans->killer;
 
