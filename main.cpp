@@ -2,7 +2,7 @@
 priest vs killer
 written by Its Mahdi! :)
 
-plz ream REAME before using this code
+plz read REAME before using this code
 */
 
 #include <iostream>
@@ -50,6 +50,7 @@ public:
 	void action_state(state_node *); // it will find the possible move from each state and add that to vector state list
 	state_node* LIFO (); //searching for goal state with last in first out strategy
 	state_node* FIFO (); //searching for goal state with first in first out strategy
+	state_node* heuristic(); // trying to find the soloution better than FIFO :D
 
 	// LIFO is DFS search and FIFO is BFS strategy
 };
@@ -144,8 +145,6 @@ state_node* search::FIFO() //search in tree with first in first out mode
 	while (state_list.size()>0)
 	{
 		count ++;
-		cout<<"size = "<<state_list.size()<<endl;
-		state_node *next_state;
 		state_node *current_state;
 		current_state = state_list.front();
 		state_list.erase(state_list.begin());
@@ -159,7 +158,28 @@ state_node* search::FIFO() //search in tree with first in first out mode
 
 	}
 }
-////////////////////////
+/////////////////////////////////////////////////////////
+state_node* search::heuristic()
+{
+	
+	long int count=0;
+	state_list.push_back(start_state);
+	while (state_list.size()>0)	
+	{
+		count ++;
+		state_node *current_state;
+		current_state = state_list.front();
+		state_list.erase(state_list.begin());
+		if ( current_state->priest==0 && current_state->killer==0 )
+		{
+			cout<<"goal state founded";
+			cout<<"***"<<count<<"***";
+			return current_state;		} 
+		else
+			action_state(current_state);
+
+	}
+}
 
 
 
