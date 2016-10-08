@@ -28,6 +28,11 @@ public:
 		parent = parent_link;
 
 	}
+
+	void show_state()
+	{
+		cout<< "priest = "<<priest<<"\tkiller = "<<killer<<"\t boat = "<<boat<<endl;
+	}
 };
 
 class search 
@@ -48,7 +53,14 @@ public:
 		goal_state=NULL;
 		start_state = new state_node(NULL,n,n,1);
 	}
-
+	void show_the_path_of_goal_state(state_node *goal)
+	{
+		while(goal != NULL)
+		{
+			goal->show_state();
+			goal = goal->parent;
+		}
+	}
 	void action_state(state_node *); // it will find the possible move from each state and add that to vector state list
 	state_node* LIFO (); //searching for goal state with last in first out strategy
 	state_node* FIFO (); //searching for goal state with first in first out strategy
@@ -61,7 +73,7 @@ void search::action_state(state_node* current_state)
 {
 	state_node *next_state;
 	cout<<state_list.size()<<endl;
-	cout<<"***"<<current_state->priest<< "***";
+	cout<<"*priest*"<<current_state->priest<< "*killer*"<<current_state->killer<<"***\n";
 				if (current_state->boat==1) // this part will do the actins when the boat is on the right side
 				{
 					if (current_state->priest -2 >= 0 )  //bringing 2 priest to the left
@@ -121,8 +133,8 @@ void search::action_state(state_node* current_state)
 						if (next_state->priest==0 || next_state->priest >= next_state->killer)
 							if (n - next_state->priest == 0 || n - next_state->priest >= n - next_state->killer)
 						state_list.push_back(next_state);
-						else delete next_state;
-					}
+						else delete next_state;	
+					} 
 					if (n - current_state->priest -1 >=0 && n - current_state->killer -1 >= 0 )
 					{
 						next_state = new state_node(current_state,current_state->priest +1,current_state->killer +1, 1);
@@ -166,6 +178,7 @@ state_node* search::FIFO() //search in tree with first in first out mode
 		{
 			cout<<"goal state founded";
 			cout<<"***"<<count<<"***";
+			//cout<<current_state->parent<<endl;
 			goal_state = new state_node;
 			goal_state = current_state;
 			return current_state;		} 
@@ -241,7 +254,8 @@ int main ()
 		ans = condition->FIFO();
 
 	cout<<endl<<ans->boat<<"	"<<ans->killer;
-
+	cout<<"salam"<<"\n \n";
+	condition->show_the_path_of_goal_state(condition->goal_state);
 
 	return 0;
 }
